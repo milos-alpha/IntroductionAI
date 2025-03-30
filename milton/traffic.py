@@ -1,4 +1,3 @@
-# traffic_model.py
 import cv2
 import numpy as np
 import os
@@ -12,6 +11,38 @@ IMG_WIDTH = 30
 IMG_HEIGHT = 30
 NUM_CATEGORIES = 43
 TEST_SIZE = 0.4
+
+
+def main():
+
+    # Check command-line arguments
+    if len(sys.argv) not in [2, 3]:
+        sys.exit("Usage: python traffic.py data_directory [model.h5]")
+
+    # Get image arrays and labels for all image files
+    images, labels = load_data(sys.argv[1])
+
+    # Split data into training and testing sets
+    labels = tf.keras.utils.to_categorical(labels)
+    x_train, x_test, y_train, y_test = train_test_split(
+        np.array(images), np.array(labels), test_size=TEST_SIZE
+    )
+
+    # Get a compiled neural network
+    model = get_model()
+
+    # Fit model on training data
+    model.fit(x_train, y_train, epochs=EPOCHS)
+
+    # Evaluate neural network performance
+    test_loss, test_acc = model.evaluate(x_test, y_test, verbose=2)
+    print(f"Test accuracy: {test_acc:.4f}")
+
+    # Save model to file
+    if len(sys.argv) == 3:
+        filename = sys.argv[2]
+        model.save(filename)
+        print(f"Model saved to {filename}.")
 
 
 def load_data(data_dir):
@@ -96,44 +127,6 @@ def get_model():
     return model
 
 
-def train_model(data_dir, model_output=None):
-    """
-    Train the model and save it to a file.
-    
-    Args:
-        data_dir: Directory containing the training data
-        model_output: Optional path to save the model
-        
-    Returns:
-        Trained model
-    """
-    # Get image arrays and labels for all image files
-    images, labels = load_data(data_dir)
-
-    # Split data into training and testing sets
-    labels = tf.keras.utils.to_categorical(labels)
-    x_train, x_test, y_train, y_test = train_test_split(
-        np.array(images), np.array(labels), test_size=TEST_SIZE
-    )
-
-    # Get a compiled neural network
-    model = get_model()
-
-    # Fit model on training data
-    model.fit(x_train, y_train, epochs=EPOCHS)
-
-    # Evaluate neural network performance
-    test_loss, test_acc = model.evaluate(x_test, y_test, verbose=2)
-    print(f"Test accuracy: {test_acc:.4f}")
-
-    # Save model to file
-    if model_output:
-        model.save(model_output)
-        print(f"Model saved to {model_output}.")
-    
-    return model
-
-
 def preprocess_image(image_path):
     """
     Preprocess a single image for prediction.
@@ -175,3 +168,7 @@ def load_trained_model(model_path):
     except Exception as e:
         print(f"Error loading model: {e}")
         return None
+
+
+if __name__ == "__main__":
+    main()
