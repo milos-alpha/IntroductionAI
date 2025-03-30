@@ -14,7 +14,7 @@ def main():
         sys.exit("Usage: python train.py data_directory [model.h5]")
     
     data_dir = sys.argv[1]
-    model_output = sys.argv[2] if len(sys.argv) == 3 else "traffic_model.h5"
+    model_output = sys.argv[2] if len(sys.argv) == 3 else "traffic.h5"
     
     # Train and save the model
     train_model(data_dir, model_output)
