@@ -24,7 +24,7 @@ goto menu
 :train
 echo.
 echo Training the model...
-python traffic.py data/gtsrb best_model.h5
+python milton\traffic.py data\gtsrb best_model.h5
 echo.
 echo Training complete. Press any key to return to menu...
 pause > nul
@@ -33,7 +33,7 @@ goto menu
 :collect
 echo.
 echo Collecting test images...
-python collect_test_images.py
+python milton\collect_test_images.py
 echo.
 echo Collection complete. Press any key to return to menu...
 pause > nul
@@ -42,7 +42,7 @@ goto menu
 :predict
 echo.
 echo Running prediction GUI...
-python predict_sign.py
+python milton\prediction_sign.py
 goto menu
 
 :end

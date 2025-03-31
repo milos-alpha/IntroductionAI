@@ -121,11 +121,6 @@ def collect_from_directory(source_dir, target_dir="images"):
             print(f"Copied {file} to {new_filename}")
             count += 1
             
-            # Exit if we've collected enough images
-            if count >= 10:
-                print("Collected 10 images as requested.")
-                break
-                
         except ValueError:
             print(f"Invalid category '{category}'. Please enter a number between 0 and 42.")
     
